@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tabelline</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="wrong">SBAGLIATO!</string>
+    <string name="score">Punteggio: %d</string>
+    <string name="language_not_supported">Lingua non supportata</string>
+    <string name="tts_initilization_failed">Fallita inizializzazione del motore vocale</string>
+
+</resources>
