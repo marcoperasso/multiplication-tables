@@ -9,5 +9,6 @@
     <string name="tts_initilization_failed">Fallita inizializzazione del motore vocale</string>
     <string name="right">Giusto!</string>
     <string name="select_table">Seleziona almeno una tabellina</string>
+    <string name="need_mode_components">Per utilizzare questa applicazione è necessario installare dei componenti aggiuntivi, adesso inizierà l\'installazione.</string>
 
 </resources>

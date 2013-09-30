@@ -28,7 +28,6 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/balloon"
         android:gravity="center"
-        android:text="10 x 10 ?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <perassoft.multiplicationtables.PredicateLayout

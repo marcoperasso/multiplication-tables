@@ -47,6 +47,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	private int score = 0;
 	private AnswerList answers;
 	private boolean questionNeeded;
+	private String[] messages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		startActivityForResult(checkIntent, RESULT_SPEECH_CHECK_CODE);
 		random = new Random(System.currentTimeMillis());
 		setDifficulties();
+		messages = getResources().getStringArray(R.array.joke_messages);
 		yesClickListener = new View.OnClickListener() {
 
 			@Override
@@ -70,9 +72,13 @@ public class MainActivity extends Activity implements OnInitListener {
 				sb.append(b);
 				sb.append(" = ");
 				sb.append(a * b);
+				sb.append(".\r\n");
+				sb.append(getRandomMessage());
 				message(sb.toString(), OK);
 				updateScoreView();
 			}
+
+			
 
 		};
 
@@ -104,6 +110,10 @@ public class MainActivity extends Activity implements OnInitListener {
 
 	}
 
+
+	private String getRandomMessage() {
+		return messages[random.nextInt(messages.length)];
+	}
 	private void updateScoreView() {
 		TextView scoreText = (TextView) findViewById(R.id.textViewScore);
 		scoreText.setText(String.format(getString(R.string.score), score));
@@ -150,6 +160,7 @@ public class MainActivity extends Activity implements OnInitListener {
 				tts = new TextToSpeech(this, this);
 
 			} else {
+				Toast.makeText(this, R.string.need_mode_components, Toast.LENGTH_LONG).show();
 				// missing data, install it
 				Intent installIntent = new Intent();
 				installIntent
@@ -224,9 +235,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			Button btn = new Button(this);
 			PredicateLayout.LayoutParams lp = new PredicateLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			//lp.leftMargin = lp.rightMargin = 2;
-			// lp.addRule(RelativeLayout.RIGHT_OF, id);
-
+			
 			btn.setText(answer.getResponse().toString());
 			rl.addView(btn, lp);
 			btn.setOnClickListener(answer.isCorrect()
@@ -274,6 +283,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			Locale current = getResources().getConfiguration().locale;
 			int result = tts.setLanguage(current);
 			tts.setPitch(1.9f);
+			tts.setSpeechRate(1.1f);
 			tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
 
 				@Override
