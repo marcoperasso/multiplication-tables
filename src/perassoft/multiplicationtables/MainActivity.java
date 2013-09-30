@@ -1,4 +1,4 @@
-package com.multiplicationtables;
+package perassoft.multiplicationtables;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,23 +6,25 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import android.os.Bundle;
+import perassoft.multiplicationtables.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import perassoft.multiplicationtables.R;
 
 public class MainActivity extends Activity implements OnInitListener {
 
@@ -30,14 +32,15 @@ public class MainActivity extends Activity implements OnInitListener {
 	private static final String SCORE = "score";
 	private static final String KO = "2";
 	private static final String OK = "1";
-	private static final int SPEECH_CHECK_CODE = 0;
+	private static final int RESULT_SPEECH_CHECK_CODE = 0;
+	private static final int RESULT_SETTINGS = 1;
 	private static final String A = "a";
 	private static final String B = "b";
 	private static final String ANSWERS = "answers";
 	private int a;
 	private int b;
 	private TextToSpeech tts;
-	private int tableMax = 10;
+	private List<Integer> tables;
 	private int maxButtons = 5;
 	private View.OnClickListener yesClickListener;
 	private OnClickListener noClickListener;
@@ -53,8 +56,9 @@ public class MainActivity extends Activity implements OnInitListener {
 		setContentView(R.layout.activity_main);
 		Intent checkIntent = new Intent();
 		checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-		startActivityForResult(checkIntent, SPEECH_CHECK_CODE);
+		startActivityForResult(checkIntent, RESULT_SPEECH_CHECK_CODE);
 		random = new Random(System.currentTimeMillis());
+		setDifficulties();
 		yesClickListener = new View.OnClickListener() {
 
 			@Override
@@ -78,13 +82,13 @@ public class MainActivity extends Activity implements OnInitListener {
 
 			@Override
 			public void onClick(View v) {
-				score-=2;
+				score -= 2;
 				message(getString(R.string.wrong), KO);
 				updateScoreView();
 			}
 
 		};
-		
+
 		if (savedInstanceState != null) {
 			score = savedInstanceState.getInt(SCORE, 0);
 			a = savedInstanceState.getInt(A);
@@ -93,21 +97,29 @@ public class MainActivity extends Activity implements OnInitListener {
 			questionNeeded = false;
 			setQuestionText();
 			generateButtons();
-		}
-		else
-		{
+		} else {
 			questionNeeded = true;
-			answers = new AnswerList();			
+			answers = new AnswerList();
 		}
-		
+
 		updateScoreView();
-		
+
 	}
 
 	private void updateScoreView() {
 		TextView scoreText = (TextView) findViewById(R.id.textViewScore);
 		scoreText.setText(String.format(getString(R.string.score), score));
 
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_settings :
+				Intent intent = new Intent(this, SettingsActivity.class);
+				startActivityForResult(intent, RESULT_SETTINGS);
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void message(String text, String messageId) {
@@ -134,7 +146,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == SPEECH_CHECK_CODE) {
+		if (requestCode == RESULT_SPEECH_CHECK_CODE) {
 			if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
 				// success, create the TTS instance
 				tts = new TextToSpeech(this, this);
@@ -146,11 +158,24 @@ public class MainActivity extends Activity implements OnInitListener {
 						.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
 				startActivity(installIntent);
 			}
-		}
+		} else if (requestCode == RESULT_SETTINGS) {
+			setDifficulties();
+		} 
+	}
+
+	private void setDifficulties() {
+		SharedPreferences sharedPrefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		tables = new ArrayList<Integer>();
+		maxButtons = Integer.parseInt(sharedPrefs.getString("answer_number", "4"));
+		for (int i = 1; i < 11; i++)
+			if (sharedPrefs.getBoolean(i + "_checkbox", true))
+				tables.add(i);
 	}
 
 	private void generateQuestion() {
-		a = random.nextInt(tableMax - 1) + 1;
+		int index = random.nextInt(tables.size());
+		a = tables.get(index);
 		b = random.nextInt(10) + 1;
 		String question = setQuestionText();
 
@@ -178,7 +203,8 @@ public class MainActivity extends Activity implements OnInitListener {
 		answers.clear();
 		for (int i = 0; i < maxButtons; i++) {
 			boolean isRight = i == rightIdx;
-			answers.add(new Answer(i == rightIdx, isRight ? a * b
+			answers.add(new Answer(i == rightIdx, isRight
+					? a * b
 					: getWrongAnswer(numbers)));
 		}
 	}
@@ -194,11 +220,12 @@ public class MainActivity extends Activity implements OnInitListener {
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			lp.leftMargin = lp.rightMargin = 2;
-			//lp.addRule(RelativeLayout.RIGHT_OF, id);
+			// lp.addRule(RelativeLayout.RIGHT_OF, id);
 
 			btn.setText(answer.getResponse().toString());
 			rl.addView(btn, lp);
-			btn.setOnClickListener(answer.isCorrect() ? yesClickListener
+			btn.setOnClickListener(answer.isCorrect()
+					? yesClickListener
 					: noClickListener);
 			buttons.add(btn);
 		}
@@ -209,18 +236,18 @@ public class MainActivity extends Activity implements OnInitListener {
 		int answer = 0;
 		do {
 			switch (random.nextInt(3)) {
-			case 0:
-				answer = a * b + random.nextInt(20) - 10;
-				break;
-			case 1:
-				answer = (a + random.nextInt(4) - 2) * b;
-				break;
-			case 2:
-				answer = (b + random.nextInt(4) - 2) * a;
-				break;
+				case 0 :
+					answer = a * b + random.nextInt(20) - 10;
+					break;
+				case 1 :
+					answer = (a + random.nextInt(4) - 2) * b;
+					break;
+				case 2 :
+					answer = (b + random.nextInt(4) - 2) * a;
+					break;
 			}
 			answer = Math.max(1, answer);
-			answer = Math.min(tableMax * 10, answer);
+			answer = Math.min(100, answer);
 		} while (answers.contains(answer));
 		answers.add(answer);
 		return answer;
@@ -269,8 +296,8 @@ public class MainActivity extends Activity implements OnInitListener {
 
 			// TTS is not initialized properly
 		} else {
-			Toast.makeText(this, R.string.tts_initilization_failed, Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, R.string.tts_initilization_failed,
+					Toast.LENGTH_LONG).show();
 			Log.e(TTS, getString(R.string.tts_initilization_failed));
 		}
 		if (questionNeeded)

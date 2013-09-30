@@ -1,0 +1,27 @@
+<resources>
+
+    <string name="title_activity_settings">Impostazioni</string>
+
+    <!-- Strings related to Settings -->
+
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+
+    <string-array name="pref_answer_number">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+    <string-array name="pref_answer_descri">
+        <item>tre</item>
+        <item>quattro</item>
+        <item>cinque</item>
+        <item>sei</item>
+        <item>sette</item>
+    </string-array>
+
+</resources>
