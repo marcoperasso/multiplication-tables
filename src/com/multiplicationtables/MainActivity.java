@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +61,8 @@ public class MainActivity extends Activity implements OnInitListener {
 			public void onClick(View v) {
 				score++;
 				StringBuilder sb = new StringBuilder();
-				sb.append("Giusto! ");
+				sb.append(getString(R.string.right));
+				sb.append(" ");
 				sb.append(a);
 				sb.append(" x ");
 				sb.append(b);
@@ -182,22 +184,20 @@ public class MainActivity extends Activity implements OnInitListener {
 	}
 
 	private void generateButtons() {
-		RelativeLayout rl = (RelativeLayout) findViewById(R.id.mainLayout);
-		int id = R.id.textViewQuestion;
+		LinearLayout rl = (LinearLayout) findViewById(R.id.answerContainer);
 		for (Button b : buttons)
 			rl.removeView(b);
 
 		for (int i = 0; i < answers.size(); i++) {
 			Answer answer = answers.get(i);
 			Button btn = new Button(this);
-			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			lp.addRule(RelativeLayout.BELOW, id);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			lp.leftMargin = lp.rightMargin = 2;
+			//lp.addRule(RelativeLayout.RIGHT_OF, id);
 
 			btn.setText(answer.getResponse().toString());
 			rl.addView(btn, lp);
-			btn.setId(i + 1);
-			id = btn.getId();
 			btn.setOnClickListener(answer.isCorrect() ? yesClickListener
 					: noClickListener);
 			buttons.add(btn);

@@ -7,5 +7,6 @@
     <string name="score">Punteggio: %d</string>
     <string name="language_not_supported">Lingua non supportata</string>
     <string name="tts_initilization_failed">Fallita inizializzazione del motore vocale</string>
+    <string name="right">Giusto!</string>
 
 </resources>
