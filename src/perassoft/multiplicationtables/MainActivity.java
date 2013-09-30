@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import perassoft.multiplicationtables.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +21,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -160,6 +158,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			}
 		} else if (requestCode == RESULT_SETTINGS) {
 			setDifficulties();
+			generateQuestion();
 		} 
 	}
 
@@ -174,13 +173,19 @@ public class MainActivity extends Activity implements OnInitListener {
 	}
 
 	private void generateQuestion() {
+		if (tables.size() == 0)
+		{
+			Toast.makeText(this, R.string.select_table, Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivityForResult(intent, RESULT_SETTINGS);
+			return;
+		}
 		int index = random.nextInt(tables.size());
 		a = tables.get(index);
 		b = random.nextInt(10) + 1;
 		String question = setQuestionText();
 
 		if (tts != null) {
-
 			tts.speak(question, TextToSpeech.QUEUE_ADD, null);
 		}
 
@@ -210,16 +215,16 @@ public class MainActivity extends Activity implements OnInitListener {
 	}
 
 	private void generateButtons() {
-		LinearLayout rl = (LinearLayout) findViewById(R.id.answerContainer);
+		PredicateLayout rl = (PredicateLayout) findViewById(R.id.answerContainer);
 		for (Button b : buttons)
 			rl.removeView(b);
 
 		for (int i = 0; i < answers.size(); i++) {
 			Answer answer = answers.get(i);
 			Button btn = new Button(this);
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+			PredicateLayout.LayoutParams lp = new PredicateLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			lp.leftMargin = lp.rightMargin = 2;
+			//lp.leftMargin = lp.rightMargin = 2;
 			// lp.addRule(RelativeLayout.RIGHT_OF, id);
 
 			btn.setText(answer.getResponse().toString());
@@ -268,7 +273,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			// Setting speech language
 			Locale current = getResources().getConfiguration().locale;
 			int result = tts.setLanguage(current);
-			tts.setPitch(-200);
+			tts.setPitch(1.9f);
 			tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
 
 				@Override

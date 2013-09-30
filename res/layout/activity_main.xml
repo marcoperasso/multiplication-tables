@@ -31,13 +31,13 @@
         android:text="10 x 10 ?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <LinearLayout
+    <perassoft.multiplicationtables.PredicateLayout
         android:id="@+id/answerContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textViewScore"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal" >
-    </LinearLayout>
+    </perassoft.multiplicationtables.PredicateLayout>
 
 </RelativeLayout>

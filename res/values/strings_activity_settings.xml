@@ -15,6 +15,9 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
     </string-array>
     <string-array name="pref_answer_descri">
         <item>tre</item>
@@ -22,6 +25,11 @@
         <item>cinque</item>
         <item>sei</item>
         <item>sette</item>
+        <item>otto</item>
+        <item>nove</item>
+        <item>dieci</item>
     </string-array>
+        <string name="answor_number">Numero di risposte</string>
+        <string name="select_answer_number">Seleziona il numero di risposte</string>
 
 </resources>

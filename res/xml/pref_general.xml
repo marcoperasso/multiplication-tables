@@ -6,7 +6,7 @@
         android:entryValues="@array/pref_answer_number"
         android:key="answer_number"
         android:defaultValue="4"
-        android:title="Numero di risposte alternative" android:dialogTitle="Seleziona il numero di risposte possibili"/>
+        android:title="@string/answor_number" android:dialogTitle="@string/select_answer_number"/>
 
     <CheckBoxPreference
         android:defaultValue="true"
