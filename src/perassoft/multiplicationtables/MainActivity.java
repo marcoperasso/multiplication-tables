@@ -6,13 +6,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import perassoft.multiplicationtables.R.string;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,8 +88,6 @@ public class MainActivity extends Activity implements OnInitListener {
 				updateScoreView();
 			}
 
-			
-
 		};
 
 		noClickListener = new View.OnClickListener() {
@@ -107,9 +115,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		}
 
 		updateScoreView();
-
 	}
-
 
 	private String getRandomMessage() {
 		return messages[random.nextInt(messages.length)];
@@ -119,7 +125,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		scoreText.setText(String.format(getString(R.string.score), score));
 
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -127,8 +133,36 @@ public class MainActivity extends Activity implements OnInitListener {
 				Intent intent = new Intent(this, SettingsActivity.class);
 				startActivityForResult(intent, RESULT_SETTINGS);
 				break;
+			case R.id.action_about :
+				showAboutDialog();
+				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void showAboutDialog() {
+		Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(string.app_name);
+		Spanned msg = Html.fromHtml(getString(R.string.about_msg));
+		builder.setMessage(msg);
+		builder.setCancelable(true);
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+		builder.setPositiveButton(android.R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog,
+							int which) {
+						dialog.cancel();
+
+					}
+				});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
+		messageView.setLinksClickable(true);
+		messageView.setMovementMethod(LinkMovementMethod.getInstance());
+		
 	}
 
 	private void message(String text, String messageId) {
@@ -161,7 +195,8 @@ public class MainActivity extends Activity implements OnInitListener {
 				tts = new TextToSpeech(this, this);
 
 			} else {
-				Toast.makeText(this, R.string.need_mode_components, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.need_mode_components,
+						Toast.LENGTH_LONG).show();
 				// missing data, install it
 				Intent installIntent = new Intent();
 				installIntent
@@ -171,23 +206,24 @@ public class MainActivity extends Activity implements OnInitListener {
 		} else if (requestCode == RESULT_SETTINGS) {
 			setDifficulties();
 			generateQuestion();
-		} 
+		}
 	}
 
 	private void setDifficulties() {
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		tables = new ArrayList<Integer>();
-		maxButtons = Integer.parseInt(sharedPrefs.getString("answer_number", "4"));
+		maxButtons = Integer.parseInt(sharedPrefs.getString("answer_number",
+				"4"));
 		for (int i = 1; i < 11; i++)
 			if (sharedPrefs.getBoolean(i + "_checkbox", true))
 				tables.add(i);
 	}
 
 	private void generateQuestion() {
-		if (tables.size() == 0)
-		{
-			Toast.makeText(this, R.string.select_table, Toast.LENGTH_LONG).show();
+		if (tables.size() == 0) {
+			Toast.makeText(this, R.string.select_table, Toast.LENGTH_LONG)
+					.show();
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivityForResult(intent, RESULT_SETTINGS);
 			return;
@@ -236,7 +272,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			Button btn = new Button(this);
 			PredicateLayout.LayoutParams lp = new PredicateLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			
+
 			btn.setText(answer.getResponse().toString());
 			rl.addView(btn, lp);
 			btn.setOnClickListener(answer.isCorrect()
@@ -301,7 +337,7 @@ public class MainActivity extends Activity implements OnInitListener {
 					});
 
 				}
-				
+
 			});
 			// If your device doesn't support language you set above
 			if (result == TextToSpeech.LANG_MISSING_DATA
@@ -318,12 +354,11 @@ public class MainActivity extends Activity implements OnInitListener {
 					Toast.LENGTH_LONG).show();
 			Log.e(TTS, getString(R.string.tts_initilization_failed));
 		}
-		if (!restoredFromInstanceState)
-		{
-			tts.speak(getString(R.string.welcome_message), TextToSpeech.QUEUE_ADD, null);
+		if (!restoredFromInstanceState) {
+			tts.speak(getString(R.string.welcome_message),
+					TextToSpeech.QUEUE_ADD, null);
 			generateQuestion();
 		}
-			
 
 	}
 
