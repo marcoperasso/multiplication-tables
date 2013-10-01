@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	private Random random;
 	private int score = 0;
 	private AnswerList answers;
-	private boolean questionNeeded;
+	private boolean restoredFromInstanceState;
 	private String[] messages;
 
 	@Override
@@ -98,11 +98,11 @@ public class MainActivity extends Activity implements OnInitListener {
 			a = savedInstanceState.getInt(A);
 			b = savedInstanceState.getInt(B);
 			answers = (AnswerList) savedInstanceState.getSerializable(ANSWERS);
-			questionNeeded = false;
+			restoredFromInstanceState = true;
 			setQuestionText();
 			generateButtons();
 		} else {
-			questionNeeded = true;
+			restoredFromInstanceState = false;
 			answers = new AnswerList();
 		}
 
@@ -119,6 +119,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		scoreText.setText(String.format(getString(R.string.score), score));
 
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -280,7 +281,8 @@ public class MainActivity extends Activity implements OnInitListener {
 		// TTS is successfully initialized
 		if (status == TextToSpeech.SUCCESS) {
 			// Setting speech language
-			Locale current = getResources().getConfiguration().locale;
+			String locale = getString(R.string.speech_locale);
+			Locale current = new Locale(locale);
 			int result = tts.setLanguage(current);
 			tts.setPitch(1.9f);
 			tts.setSpeechRate(1.1f);
@@ -299,6 +301,7 @@ public class MainActivity extends Activity implements OnInitListener {
 					});
 
 				}
+				
 			});
 			// If your device doesn't support language you set above
 			if (result == TextToSpeech.LANG_MISSING_DATA
@@ -315,8 +318,12 @@ public class MainActivity extends Activity implements OnInitListener {
 					Toast.LENGTH_LONG).show();
 			Log.e(TTS, getString(R.string.tts_initilization_failed));
 		}
-		if (questionNeeded)
+		if (!restoredFromInstanceState)
+		{
+			tts.speak(getString(R.string.welcome_message), TextToSpeech.QUEUE_ADD, null);
 			generateQuestion();
+		}
+			
 
 	}
 
@@ -326,12 +333,17 @@ public class MainActivity extends Activity implements OnInitListener {
 			generateQuestion();
 
 	}
-
+	@Override
+	protected void onPause() {
+		if (tts != null) {
+			tts.stop();
+		}
+		super.onPause();
+	}
 	@Override
 	protected void onDestroy() {
 		if (tts != null) {
 			tts.stop();
-			tts.shutdown();
 		}
 		super.onDestroy();
 	}
