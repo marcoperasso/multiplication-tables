@@ -9,10 +9,11 @@
     <string name="tts_initilization_failed">Fallita inizializzazione del motore vocale</string>
     <string name="right">Giusto!</string>
     <string name="select_table">Seleziona almeno una tabellina</string>
-    <string name="need_mode_components">Per utilizzare questa applicazione è necessario installare dei componenti aggiuntivi, adesso inizierà l\'installazione.</string>
+    <string name="need_mode_components">Per utilizzare questa applicazione è necessario installare i componenti per la sintesi vocale della lingua \'%s\'. Terminata l\'installazione dei componenti per favore riavvia l\'applicazione.</string>
     <string name="speech_locale">it-IT</string>
-    <string name="welcome_message">Ciao, sono miss Puzzy, la tua maestra di matematica un po\' sciroccata. Vuoi sudiare con me?</string>
+    <string name="welcome_message">Ciao, sono miss Pasi, la tua maestra di matematica un po\' sciroccata. Vuoi sudiare con me?</string>
     <string name="about_msg">Questa applicazione è stata scritta da &lt;a href=\'http://fuoridalsolco.wordpress.com/\'&gt;Marco Perasso&lt;/a&gt; per i propri figli. Mi raccomando, fanne buon uso!</string>
     <string name="action_information">Informazioni</string>
+    <string name="times">per</string>
 
 </resources>

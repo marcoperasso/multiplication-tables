@@ -7,28 +7,25 @@ import java.util.Locale;
 import java.util.Random;
 
 import perassoft.multiplicationtables.R.string;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.text.Html;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -79,7 +76,9 @@ public class MainActivity extends Activity implements OnInitListener {
 				sb.append(getString(R.string.right));
 				sb.append(" ");
 				sb.append(a);
-				sb.append(" x ");
+				sb.append(" ");
+				sb.append(getString(R.string.times));
+				sb.append(" ");
 				sb.append(b);
 				sb.append(" = ");
 				sb.append(a * b);
@@ -121,6 +120,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	private String getRandomMessage() {
 		return messages[random.nextInt(messages.length)];
 	}
+
 	private void updateScoreView() {
 		TextView scoreText = (TextView) findViewById(R.id.textViewScore);
 		scoreText.setText(String.format(getString(R.string.score), score));
@@ -130,13 +130,13 @@ public class MainActivity extends Activity implements OnInitListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_settings :
-				Intent intent = new Intent(this, SettingsActivity.class);
-				startActivityForResult(intent, RESULT_SETTINGS);
-				break;
-			case R.id.action_about :
-				showAboutDialog();
-				break;
+		case R.id.action_settings:
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivityForResult(intent, RESULT_SETTINGS);
+			break;
+		case R.id.action_about:
+			showAboutDialog();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -152,18 +152,18 @@ public class MainActivity extends Activity implements OnInitListener {
 				new DialogInterface.OnClickListener() {
 
 					@Override
-					public void onClick(DialogInterface dialog,
-							int which) {
+					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
 
 					}
 				});
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
+		TextView messageView = (TextView) dialog
+				.findViewById(android.R.id.message);
 		messageView.setLinksClickable(true);
 		messageView.setMovementMethod(LinkMovementMethod.getInstance());
-		
+
 	}
 
 	private void message(String text, String messageId) {
@@ -191,23 +191,43 @@ public class MainActivity extends Activity implements OnInitListener {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == RESULT_SPEECH_CHECK_CODE) {
-			if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+			if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_FAIL) {
+				startActivityForInstall();
+			} else {
 				// success, create the TTS instance
 				tts = new TextToSpeech(this, this);
 
-			} else {
-				Toast.makeText(this, R.string.need_mode_components,
-						Toast.LENGTH_LONG).show();
-				// missing data, install it
-				Intent installIntent = new Intent();
-				installIntent
-						.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-				startActivity(installIntent);
 			}
 		} else if (requestCode == RESULT_SETTINGS) {
 			setDifficulties();
 			generateQuestion();
 		}
+	}
+
+	private void startActivityForInstall() {
+		Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(string.app_name);
+
+		builder.setMessage(getString(R.string.need_mode_components, getCurrentLocale().getDisplayLanguage()));
+		builder.setCancelable(true);
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+		builder.setPositiveButton(android.R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// missing data, install it
+						Intent installIntent = new Intent();
+						installIntent
+								.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+						startActivity(installIntent);
+						finish();
+						dialog.cancel();
+
+					}
+				});
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 
 	private void setDifficulties() {
@@ -244,7 +264,7 @@ public class MainActivity extends Activity implements OnInitListener {
 
 	private String setQuestionText() {
 		TextView textQuestion = (TextView) findViewById(R.id.textViewQuestion);
-		String question = a + " x " + b + " ?";
+		String question = a + " " + getString(R.string.times) + " " + b + " ?";
 		textQuestion.setText(question);
 		return question;
 	}
@@ -257,8 +277,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		answers.clear();
 		for (int i = 0; i < maxButtons; i++) {
 			boolean isRight = i == rightIdx;
-			answers.add(new Answer(i == rightIdx, isRight
-					? a * b
+			answers.add(new Answer(i == rightIdx, isRight ? a * b
 					: getWrongAnswer(numbers)));
 		}
 	}
@@ -271,12 +290,13 @@ public class MainActivity extends Activity implements OnInitListener {
 		for (int i = 0; i < answers.size(); i++) {
 			Answer answer = answers.get(i);
 			Button btn = new Button(this);
-			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
 
 			btn.setText(answer.getResponse().toString());
+			
 			rl.addView(btn, lp);
-			btn.setOnClickListener(answer.isCorrect()
-					? yesClickListener
+			btn.setOnClickListener(answer.isCorrect() ? yesClickListener
 					: noClickListener);
 			buttons.add(btn);
 		}
@@ -287,15 +307,15 @@ public class MainActivity extends Activity implements OnInitListener {
 		int answer = 0;
 		do {
 			switch (random.nextInt(3)) {
-				case 0 :
-					answer = a * b + random.nextInt(20) - 10;
-					break;
-				case 1 :
-					answer = (a + random.nextInt(4) - 2) * b;
-					break;
-				case 2 :
-					answer = (b + random.nextInt(4) - 2) * a;
-					break;
+			case 0:
+				answer = a * b + random.nextInt(20) - 10;
+				break;
+			case 1:
+				answer = (a + random.nextInt(4) - 2) * b;
+				break;
+			case 2:
+				answer = (b + random.nextInt(4) - 2) * a;
+				break;
 			}
 			answer = Math.max(1, answer);
 			answer = Math.min(100, answer);
@@ -317,8 +337,11 @@ public class MainActivity extends Activity implements OnInitListener {
 		// TTS is successfully initialized
 		if (status == TextToSpeech.SUCCESS) {
 			// Setting speech language
-			String locale = getString(R.string.speech_locale);
-			Locale current = new Locale(locale);
+			Locale current = getCurrentLocale();
+			if (tts.isLanguageAvailable(current) < TextToSpeech.LANG_AVAILABLE) {
+				startActivityForInstall();
+				return;
+			}
 			int result = tts.setLanguage(current);
 			tts.setPitch(1.9f);
 			tts.setSpeechRate(1.1f);
@@ -347,6 +370,10 @@ public class MainActivity extends Activity implements OnInitListener {
 						Toast.LENGTH_LONG).show();
 				Log.e(TTS, getString(R.string.language_not_supported));
 			}
+			if (!restoredFromInstanceState) {
+				tts.speak(getString(R.string.welcome_message),
+						TextToSpeech.QUEUE_ADD, null);
+			}
 
 			// TTS is not initialized properly
 		} else {
@@ -355,11 +382,14 @@ public class MainActivity extends Activity implements OnInitListener {
 			Log.e(TTS, getString(R.string.tts_initilization_failed));
 		}
 		if (!restoredFromInstanceState) {
-			tts.speak(getString(R.string.welcome_message),
-					TextToSpeech.QUEUE_ADD, null);
 			generateQuestion();
 		}
 
+	}
+
+	private Locale getCurrentLocale() {
+		String locale = getString(R.string.speech_locale);
+		return new Locale(locale);
 	}
 
 	private void onSpeechEnded(String utteranceId) {
@@ -368,6 +398,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			generateQuestion();
 
 	}
+
 	@Override
 	protected void onPause() {
 		if (tts != null) {
@@ -375,6 +406,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		}
 		super.onPause();
 	}
+
 	@Override
 	protected void onDestroy() {
 		if (tts != null) {
