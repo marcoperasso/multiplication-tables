@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -270,8 +271,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		for (int i = 0; i < answers.size(); i++) {
 			Answer answer = answers.get(i);
 			Button btn = new Button(this);
-			PredicateLayout.LayoutParams lp = new PredicateLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 			btn.setText(answer.getResponse().toString());
 			rl.addView(btn, lp);
