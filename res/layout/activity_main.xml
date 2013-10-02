@@ -23,12 +23,13 @@
     <TextView
         android:id="@+id/textViewQuestion"
         android:layout_width="160dp"
-        android:layout_height="50dp"
+        //android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/balloon"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="10 per 10 ?"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <perassoft.multiplicationtables.PredicateLayout
         android:id="@+id/answerContainer"
