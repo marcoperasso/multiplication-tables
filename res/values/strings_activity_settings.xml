@@ -1,14 +1,13 @@
 <resources>
 
-    <string name="title_activity_settings">Impostazioni</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
 
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-
+   
     <string-array name="pref_answer_number">
         <item>3</item>
         <item>4</item>
@@ -16,20 +15,27 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
-        <item>9</item>
-        <item>10</item>
     </string-array>
     <string-array name="pref_answer_descri">
-        <item>tre</item>
-        <item>quattro</item>
-        <item>cinque</item>
-        <item>sei</item>
-        <item>sette</item>
-        <item>otto</item>
-        <item>nove</item>
-        <item>dieci</item>
+        <item>three</item>
+        <item>four</item>
+        <item>five</item>
+        <item>six</item>
+        <item>seven</item>
+        <item>eight</item>
     </string-array>
-        <string name="answor_number">Numero di risposte</string>
-        <string name="select_answer_number">Seleziona il numero di risposte</string>
+        <string name="answor_number">Number of answers</string>
+        <string name="select_answer_number">Please select the number of answers</string>
+        <string name="tabellina_dell_apos_uno">One Times Tables</string>
+        <string name="tabellina_del_due">Two Times Tables</string>
+        <string name="tabellina_del_tre">Three Times Tables</string>
+        <string name="tabellina_del_quattro">Four Times Tables</string>
+        <string name="tabellina_del_cinque">Five Times Tables</string>
+        <string name="tabellina_del_sei">Six Times Tables</string>
+        <string name="tabellina_del_sette">Seven Times Tables</string>
+        <string name="tabellina_dell_apos_otto">Eight Times Tables</string>
+        <string name="tabellina_del_nove">Nine Times Tables</string>
+        <string name="tabellina_del_dieci">Ten Times Tables</string>
+        <string name="settings_title">Set the difficulty level</string>
 
 </resources>

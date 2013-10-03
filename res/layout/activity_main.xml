@@ -20,6 +20,7 @@
         android:background="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+
     <perassoft.multiplicationtables.PredicateLayout
         android:id="@+id/answerContainer"
         android:layout_width="wrap_content"
@@ -33,13 +34,13 @@
 
     <TextView
         android:id="@+id/textViewQuestion"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
+        android:layout_width="130dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="32dp"
-        android:layout_toLeftOf="@+id/textViewScore"
         android:background="@drawable/balloon"
         android:gravity="center"
+        android:paddingBottom="30dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

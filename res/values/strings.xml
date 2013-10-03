@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tabelline</string>
-    <string name="action_settings">Impostazioni</string>
-    <string name="wrong">SBAGLIATO!</string>
-    <string name="score">Punteggio: %d</string>
-    <string name="language_not_supported">Lingua non supportata</string>
-    <string name="tts_initilization_failed">Fallita inizializzazione del motore vocale</string>
-    <string name="right">Giusto!</string>
-    <string name="select_table">Seleziona almeno una tabellina</string>
-    <string name="need_mode_components">Per utilizzare questa applicazione è necessario installare i componenti per la sintesi vocale della lingua \'%s\'. Terminata l\'installazione dei componenti per favore riavvia l\'applicazione.</string>
-    <string name="speech_locale">it-IT</string>
-    <string name="welcome_message">Ciao, sono miss Puzzy, la tua maestra di matematica un po\' sciroccata. Vuoi sudiare con me?</string>
-    <string name="about_msg">Questa applicazione è stata scritta da &lt;a href=\'http://fuoridalsolco.wordpress.com/\'&gt;Marco Perasso&lt;/a&gt; per i propri figli. Mi raccomando, fanne buon uso!</string>
-    <string name="action_information">Informazioni</string>
-    <string name="times">per</string>
-
+    <string name="app_name">Multiplication Tables</string>
+    <string name="action_settings">Settings</string>
+    <string name="wrong">WRONG!</string>
+    <string name="score">Score: %d</string>
+    <string name="language_not_supported">Language non supported</string>
+    <string name="tts_initilization_failed">Failed to initialize the speak engine</string>
+    <string name="right">Right!</string>
+    <string name="select_table">Please select at least one table</string>
+    <string name="need_mode_components">This app needs installation of the speech engine components for the following languages: \'%s\'. At the end of the installation please restart the application.</string>
+    <string name="speech_locale">en</string>
+    <string name="welcome_message">Hello, I\'m miss Puzzy, your crazy teacher of mathematics. Do you want to study with me?</string>
+    <string name="about_msg">This app was written by &lt;a href=\'http://fuoridalsolco.wordpress.com/\'&gt;Marco Perasso&lt;/a&gt; for his sons. Enjoy it!</string>
+    <string name="action_information">Information</string>
+    <string name="times">times</string>
+<string name="speech_joke_message_locale">it-IT</string>
+    
 </resources>
