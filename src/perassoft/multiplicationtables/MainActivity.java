@@ -1,5 +1,6 @@
 package perassoft.multiplicationtables;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +105,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			score = savedInstanceState.getInt(SCORE, 0);
 			a = savedInstanceState.getInt(A);
 			b = savedInstanceState.getInt(B);
-			Object serializable = savedInstanceState.getSerializable(ANSWERS);
+			Serializable serializable = savedInstanceState.getSerializable(ANSWERS);
 			answers = serializable == null ? new ArrayList<Answer>() : (ArrayList<Answer>)serializable;
 			restoredFromInstanceState = true;
 			setQuestionText();
