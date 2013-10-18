@@ -1,7 +1,6 @@
 package perassoft.multiplicationtables;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Answer implements Serializable {
 
@@ -27,10 +26,3 @@ public class Answer implements Serializable {
 
 }
 
-class AnswerList extends ArrayList<Answer> implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 269159548646085465L;
-}

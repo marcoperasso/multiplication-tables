@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	private List<Button> buttons = new ArrayList<Button>();
 	private Random random;
 	private int score = 0;
-	private AnswerList answers;
+	private ArrayList<Answer> answers;
 	private boolean restoredFromInstanceState;
 	private String[] messages;
 
@@ -104,13 +104,14 @@ public class MainActivity extends Activity implements OnInitListener {
 			score = savedInstanceState.getInt(SCORE, 0);
 			a = savedInstanceState.getInt(A);
 			b = savedInstanceState.getInt(B);
-			answers = (AnswerList) savedInstanceState.getSerializable(ANSWERS);
+			Object serializable = savedInstanceState.getSerializable(ANSWERS);
+			answers = serializable == null ? new ArrayList<Answer>() : (ArrayList<Answer>)serializable;
 			restoredFromInstanceState = true;
 			setQuestionText();
 			generateButtons();
 		} else {
 			restoredFromInstanceState = false;
-			answers = new AnswerList();
+			answers = new ArrayList<Answer>();
 		}
 
 		updateScoreView();
