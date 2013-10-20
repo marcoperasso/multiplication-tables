@@ -14,6 +14,8 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -144,7 +146,15 @@ public class MainActivity extends Activity implements OnInitListener {
 
 	private void showAboutDialog() {
 		Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(string.app_name);
+		PackageInfo pInfo = null;
+		String version = "";
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			version = " v. " + pInfo.versionName;
+		} catch (NameNotFoundException e) {
+			
+		}
+		builder.setTitle(getString(string.app_name) + version);
 		Spanned msg = Html.fromHtml(getString(R.string.about_msg));
 		builder.setMessage(msg);
 		builder.setCancelable(true);
@@ -241,8 +251,10 @@ public class MainActivity extends Activity implements OnInitListener {
 				.getDisplayLanguage();
 
 		if (!displayLanguage2.equals(displayLanguage))
+		{
 			sb.append(", ");
-		sb.append(displayLanguage2);
+			sb.append(displayLanguage2);
+		}
 		return sb.toString();
 	}
 
