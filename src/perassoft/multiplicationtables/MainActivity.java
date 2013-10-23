@@ -59,6 +59,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	private boolean restoredFromInstanceState;
 	private String[] messages;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
