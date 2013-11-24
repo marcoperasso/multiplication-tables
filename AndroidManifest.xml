@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="perassoft.multiplicationtables"
-    android:versionCode="9"
-    android:versionName="1.4" android:installLocation="auto">
+    android:versionCode="10"
+    android:versionName="1.5" android:installLocation="auto">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -24,6 +24,11 @@
         <activity
             android:name="perassoft.multiplicationtables.SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+         <activity
+            android:name="perassoft.multiplicationtables.SentencesActivity"
+            android:label="@string/title_activity_sentences" 
+            android:windowSoftInputMode="stateUnchanged" >
         </activity>
     </application>
 

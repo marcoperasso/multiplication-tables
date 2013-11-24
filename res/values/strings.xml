@@ -15,6 +15,12 @@
     <string name="about_msg">This app was written by &lt;a href=\'http://fuoridalsolco.wordpress.com/\'&gt;Marco Perasso&lt;/a&gt; for his sons. Enjoy it!</string>
     <string name="action_information">Information</string>
     <string name="times">times</string>
-<string name="speech_joke_message_locale">it-IT</string>
-    
+    <string name="speech_joke_message_locale">it-IT</string>
+    <string name="title_activity_sentences">Sentences for Miss Puzzy</string>
+    <string name="delete_sentence">Delete</string>
+    <string name="sentences">Sentences</string>
+    <string name="use_only_my_sentences">Use only my sentences</string>
+    <string name="no_sentences">There are no custom sentences at present, you can add one by using the keyboard.</string>
+    <string name="tell_your_sentence_to_miss_puzzy">Tell your sentence to Miss Puzzy</string>
+
 </resources>

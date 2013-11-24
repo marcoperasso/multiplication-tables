@@ -87,7 +87,14 @@ public class MainActivity extends Activity implements OnInitListener {
 				sb.append(a * b);
 				sb.append(".");
 				message(sb.toString(), NEUTRAL, getCurrentLocale());
-				message(getRandomMessage(), OK, getCurrentJokeMessageLocale());
+				
+				StringBuilder msg = new StringBuilder();
+				Locale loc = getRandomMessage(msg);
+				if (loc != null)
+					message(msg.toString(), OK, loc);
+				else
+					generateQuestion();
+				
 				updateScoreView();
 			}
 
@@ -108,8 +115,10 @@ public class MainActivity extends Activity implements OnInitListener {
 			score = savedInstanceState.getInt(SCORE, 0);
 			a = savedInstanceState.getInt(A);
 			b = savedInstanceState.getInt(B);
-			Serializable serializable = savedInstanceState.getSerializable(ANSWERS);
-			answers = serializable == null ? new ArrayList<Answer>() : (ArrayList<Answer>)serializable;
+			Serializable serializable = savedInstanceState
+					.getSerializable(ANSWERS);
+			answers = serializable == null ? new ArrayList<Answer>()
+					: (ArrayList<Answer>) serializable;
 			restoredFromInstanceState = true;
 			setQuestionText();
 			generateButtons();
@@ -121,8 +130,25 @@ public class MainActivity extends Activity implements OnInitListener {
 		updateScoreView();
 	}
 
-	private String getRandomMessage() {
-		return messages[random.nextInt(messages.length)];
+	private Locale getRandomMessage(StringBuilder sb) {
+
+		Sentences ss = Sentences.getSentences(this);
+		if (ss.isOnlyMine()) {
+			if (ss.size() == 0) {
+				return null;
+			}
+			int idx = random.nextInt(ss.size());
+
+			sb.append(ss.get(idx));
+			return Locale.getDefault();
+		}
+		int idx = random.nextInt(messages.length + ss.size());
+		if (idx < messages.length) {
+			sb.append(messages[idx]);
+			return getCurrentJokeMessageLocale();
+		}
+		sb.append(ss.get(idx - messages.length));
+		return Locale.getDefault();
 	}
 
 	private void updateScoreView() {
@@ -134,13 +160,16 @@ public class MainActivity extends Activity implements OnInitListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_settings :
-				Intent intent = new Intent(this, SettingsActivity.class);
-				startActivityForResult(intent, RESULT_SETTINGS);
-				break;
-			case R.id.action_about :
-				showAboutDialog();
-				break;
+		case R.id.action_settings:
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivityForResult(intent, RESULT_SETTINGS);
+			break;
+		case R.id.action_about:
+			showAboutDialog();
+			break;
+		case R.id.action_sentences:
+			startActivity(new Intent(this, SentencesActivity.class));
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -153,7 +182,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			version = " v. " + pInfo.versionName;
 		} catch (NameNotFoundException e) {
-			
+
 		}
 		builder.setTitle(getString(string.app_name) + version);
 		Spanned msg = Html.fromHtml(getString(R.string.about_msg));
@@ -251,8 +280,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		String displayLanguage2 = getCurrentJokeMessageLocale()
 				.getDisplayLanguage();
 
-		if (!displayLanguage2.equals(displayLanguage))
-		{
+		if (!displayLanguage2.equals(displayLanguage)) {
 			sb.append(", ");
 			sb.append(displayLanguage2);
 		}
@@ -307,8 +335,7 @@ public class MainActivity extends Activity implements OnInitListener {
 		answers.clear();
 		for (int i = 0; i < maxButtons; i++) {
 			boolean isRight = i == rightIdx;
-			answers.add(new Answer(i == rightIdx, isRight
-					? a * b
+			answers.add(new Answer(i == rightIdx, isRight ? a * b
 					: getWrongAnswer(numbers)));
 		}
 	}
@@ -327,8 +354,7 @@ public class MainActivity extends Activity implements OnInitListener {
 			btn.setText(answer.getResponse().toString());
 
 			rl.addView(btn, lp);
-			btn.setOnClickListener(answer.isCorrect()
-					? yesClickListener
+			btn.setOnClickListener(answer.isCorrect() ? yesClickListener
 					: noClickListener);
 			buttons.add(btn);
 		}
@@ -339,15 +365,15 @@ public class MainActivity extends Activity implements OnInitListener {
 		int answer = 0;
 		do {
 			switch (random.nextInt(3)) {
-				case 0 :
-					answer = a * b + random.nextInt(20) - 10;
-					break;
-				case 1 :
-					answer = (a + random.nextInt(4) - 2) * b;
-					break;
-				case 2 :
-					answer = (b + random.nextInt(4) - 2) * a;
-					break;
+			case 0:
+				answer = a * b + random.nextInt(20) - 10;
+				break;
+			case 1:
+				answer = (a + random.nextInt(4) - 2) * b;
+				break;
+			case 2:
+				answer = (b + random.nextInt(4) - 2) * a;
+				break;
 			}
 			answer = Math.max(1, answer);
 			answer = Math.min(100, answer);
@@ -424,10 +450,12 @@ public class MainActivity extends Activity implements OnInitListener {
 		String locale = getString(R.string.speech_locale);
 		return new Locale(locale);
 	}
+
 	private Locale getCurrentJokeMessageLocale() {
 		String locale = getString(R.string.speech_joke_message_locale);
 		return new Locale(locale);
 	}
+
 	private void onSpeechEnded(String utteranceId) {
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 		if (utteranceId.equals(OK))
@@ -447,6 +475,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	protected void onDestroy() {
 		if (tts != null) {
 			tts.stop();
+			tts.shutdown();
 		}
 		super.onDestroy();
 	}

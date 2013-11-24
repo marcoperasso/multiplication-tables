@@ -14,5 +14,11 @@
     <string name="about_msg">Questa applicazione è stata scritta da &lt;a href=\'http://fuoridalsolco.wordpress.com/\'&gt;Marco Perasso&lt;/a&gt; per i propri figli. Mi raccomando, fanne buon uso!</string>
     <string name="action_information">Informazioni</string>
     <string name="times">per</string>
-
+	<string name="title_activity_sentences">Frasi per Miss Puzzy</string>
+    <string name="delete_sentence">Elimina</string>
+    <string name="sentences">Frasi</string>
+    <string name="use_only_my_sentences">Usa solo le mie frasi</string>
+    <string name="no_sentences">Non ci sono frasi personalizzate al momento, puoi aggiungerne una usando la tastiera.</string>
+    <string name="tell_your_sentence_to_miss_puzzy">Suggerisci la tua frase a Miss Puzzy</string>
+    
 </resources>
