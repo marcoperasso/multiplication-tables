@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-   <string-array name="joke_messages">
+   <string-array name="joke_messages" translatable="false">
         <item>Per mille corbezzoli, allora sei proprio in gamba!</item>
 		<item>Che mi venga un tic al naso, complimenti!</item>
 		<item>Per tutte le ciabatte puzzolenti, ottimo lavoro!</item>
@@ -30,5 +30,11 @@
 		<item>Che puzza di bambino rancido!</item>
 		<item>Per tutte le cacchette di topo!</item>
 		<item>Per mille puzzette svolazzanti!</item>
+		<item>Che mi caschino i peli delle ascelle!</item>
+		<item>Perdindirindolina!</item>
+		<item>Per tutti i trichechi senza baffi!</item>
+		<item>Corpo di un canguro infreddolito!</item>
+		<item>Mi venisse la parrucca sulla fronte!</item>
     </string-array>
 </resources>
+

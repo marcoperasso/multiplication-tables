@@ -66,7 +66,14 @@ public class MainActivity extends Activity implements OnInitListener {
 		setContentView(R.layout.activity_main);
 		Intent checkIntent = new Intent();
 		checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-		startActivityForResult(checkIntent, RESULT_SPEECH_CHECK_CODE);
+		try
+		{
+			startActivityForResult(checkIntent, RESULT_SPEECH_CHECK_CODE);
+		}
+		catch (Exception ex)
+		{
+			
+		}
 		random = new Random(System.currentTimeMillis());
 		setDifficulties();
 		messages = getResources().getStringArray(R.array.joke_messages);
